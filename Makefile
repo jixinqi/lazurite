@@ -7,13 +7,14 @@ BUILD_DIR                      = ./tmp
 BIN_DIR                        = ./bin
 
 vpath %.cpp                    $(SRC_DIR)
+.PHONY                         : clean
 
-default : $(BIN_DIR)/lazurite
+default                        : $(BIN_DIR)/lazurite
 
-$(BIN_DIR)/lazurite : $(BUILD_DIR)/main.o
+$(BIN_DIR)/lazurite            : $(BUILD_DIR)/main.o
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
 
-$(BUILD_DIR)/%.o : %.cpp
+$(BUILD_DIR)/%.o               : %.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $^
 
 clean :
