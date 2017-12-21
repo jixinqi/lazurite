@@ -5,7 +5,7 @@ namespace lazurite
 {
 	namespace http
 	{
-		class listen
+		class listen : public std::enable_shared_from_this<listen>
 		{
 		public:
 			listen(

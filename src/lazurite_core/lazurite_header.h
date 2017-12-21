@@ -14,5 +14,6 @@
 
 #include "http_listen.h"
 #include "http_server.h"
+#include "http_session.h"
 
 #endif
