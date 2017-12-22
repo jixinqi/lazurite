@@ -12,6 +12,15 @@
 
 #include <boost/asio.hpp>
 
+namespace lazurite
+{
+	namespace http
+	{
+		typedef std::array<unsigned char, 4096> http_msg_buffer;
+	}
+}
+
+#include "http_parser.h"
 #include "http_listen.h"
 #include "http_server.h"
 #include "http_session.h"

@@ -14,7 +14,8 @@ default                        : $(BIN_DIR)/lazurite
 $(BIN_DIR)/lazurite            : $(BUILD_DIR)/main.o \
                                  $(BUILD_DIR)/http_listen.o \
                                  $(BUILD_DIR)/http_server.o \
-                                 $(BUILD_DIR)/http_session.o
+                                 $(BUILD_DIR)/http_session.o \
+                                 $(BUILD_DIR)/http_parser.o
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
 
 $(BUILD_DIR)/%.o               : %.cpp

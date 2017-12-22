@@ -12,15 +12,14 @@ namespace lazurite
 				std::shared_ptr<boost::asio::io_service> io_service_ptr,
 				boost::asio::ip::tcp::socket             socket
 			);
-			session& operator=(const session &) = delete;
 			void start();
 			void do_read();
 			void do_write();
 		private:
 			std::shared_ptr<boost::asio::io_service> io_service_ptr;
 			boost::asio::ip::tcp::socket             socket;
-			
-			std::array<unsigned char, 8 * 1024>      buffer;
+			http_msg_buffer                          buffer;
+			parser                                   _parser;
 		};
 	}
 }

@@ -1,8 +1,6 @@
 #include <iostream>
 #include <string>
 
-#include <boost/asio.hpp>
-
 #include "lazurite_core.h"
 
 int main()

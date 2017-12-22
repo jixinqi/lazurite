@@ -7,7 +7,6 @@ lazurite::http::session::session(
 :io_service_ptr(io_service_ptr)
 ,socket(std::move(socket))
 {
-
 }
 
 void lazurite::http::session::start()
@@ -26,11 +25,21 @@ void lazurite::http::session::do_read()
 			{
 				return;
 			}
-			for (std::size_t i = 0; i != length; i++)
+
+			if (!_parser.append_msg(buffer, length))
 			{
-				std::cout << buffer.at(i);
+				return;
 			}
-			std::cout << std::endl;
+
+			std::size_t parse_index = _parser.get_parse_index();
+
+			if (parse_index == 0)
+			{
+				if (!_parser.parser_first_line())
+				{
+					return;
+				}
+			}
 		}
 	);
 }
