@@ -5,6 +5,6 @@
 
 int main()
 {
-	lazurite::http::server http_server;
-	http_server.run();
+    lazurite::http::server http_server;
+    http_server.run();
 }

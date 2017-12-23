@@ -3,18 +3,18 @@
 
 namespace lazurite
 {
-	namespace http
-	{
-		class server
-		{
-		public:
-			server();
-			server& operator=(const server &) = delete;
-			void add_route();
-			void run();
-		private:
-		};
-	}
+    namespace http
+    {
+        class server
+        {
+        public:
+            server();
+            server& operator=(const server &) = delete;
+            void add_route();
+            void run();
+        private:
+        };
+    }
 }
 
 #endif

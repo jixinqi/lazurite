@@ -14,10 +14,10 @@
 
 namespace lazurite
 {
-	namespace http
-	{
-		typedef std::array<unsigned char, 4096> http_msg_buffer;
-	}
+    namespace http
+    {
+        typedef std::array<unsigned char, 4096> http_msg_buffer;
+    }
 }
 
 #include "http_parser.h"
