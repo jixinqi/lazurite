@@ -28,6 +28,8 @@ def update_line_break(filename):
     with open(i,"r") as f:
         data = f.read()
         data = data.replace("\r\n","\n")
+        if(len(data) != 0 and data[-1] != "\n"):
+            data += "\n"
 
     with open(i,"w") as f:
         f.write(data)
