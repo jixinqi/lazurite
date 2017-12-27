@@ -16,7 +16,7 @@ namespace lazurite
 {
     namespace http
     {
-        typedef std::array<unsigned char, 4096> http_msg_buffer;
+        typedef std::array<unsigned char, 8 * 1024> http_msg_buffer;
     }
 }
 

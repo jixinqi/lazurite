@@ -26,19 +26,25 @@ void lazurite::http::session::do_read()
                 return;
             }
 
-            if (!_parser.append_msg(buffer, length))
+            if (!_parser.raw_msg_length() + length > 16 * 1024 * 1024)
             {
                 return;
             }
 
-            std::size_t parse_index = _parser.get_parse_index();
+            _parser.append_msg(buffer,length);
 
-            if (parse_index == 0)
+            if (!_parser.do_parse())
             {
-                if (!_parser.parser_first_line())
-                {
-                    return;
-                }
+                return;
+            }
+
+            if (!_parser.msg_end())
+            {
+                do_read();
+            }
+            else
+            {
+                do_write();
             }
         }
     );

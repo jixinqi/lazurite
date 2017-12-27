@@ -7,26 +7,19 @@ namespace lazurite
     {
         struct request
         {
-            /*  status:
-             *  0   => init
-             *  1   => parsed first line
-             *  2   => get full header
-             *  100 => parsed http header
-             *  200 => parsed http body
-             *  999 => finish
-             */
-            std::size_t parse_status = 0;
-            std::size_t parse_index = 0;
+            std::size_t first_line_end_index = 0;
+            std::size_t header_end_index     = 0;
+            std::size_t body_end_index       = 0;
 
-            std::string raw_http_request_msg;
+            std::string raw_request_msg;
+
+            std::string raw_request_first_line;
+            std::string raw_request_header;
+            std::string raw_request_body;
 
             std::string request_method;
             std::string request_uri;
             std::string request_version;
-
-            std::string raw_request_header;
-            std::string raw_request_body;
-
             std::map<std::string, std::string> params;
             std::map<std::string, std::string> data;
         };
@@ -35,15 +28,17 @@ namespace lazurite
         {
         public:
             parser();
-            bool          append_msg(const http_msg_buffer &_http_msg_buffer, const std::size_t &_length);
-            std::size_t   get_parse_index();
-            void          set_parse_index(const std::size_t &index);
+            std::size_t   raw_msg_length();
+            void          append_msg(const http_msg_buffer &_http_msg_buffer, const std::size_t &_length);
 
-            bool          parser_first_line();
-            bool          get_full_header();
-            
+            bool          do_parse();
+            bool          msg_end();
+
         private:
             request       _request;
+            bool          parser_first_line();
+            bool          parser_header();
+            bool          parser_body();
         };
     }
 }
