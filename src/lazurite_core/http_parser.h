@@ -21,6 +21,7 @@ namespace lazurite
             std::string request_uri;
             std::string request_version;
             std::map<std::string, std::string> params;
+            std::map<std::string, std::string> header;
             std::map<std::string, std::string> data;
         };
 
