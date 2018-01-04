@@ -52,11 +52,14 @@ bool lazurite::http::parser::msg_end()
 
 bool lazurite::http::parser::parser_first_line()
 {
-    std::size_t index = _request.raw_request_msg.find("\r\n");
+    const std::size_t index = _request.raw_request_msg.find("\r\n");
     if (index == _request.raw_request_msg.npos)
     {
         return false;
     }
+
+    _request.raw_request_first_line = _request.raw_request_msg.substr(0, index + 2);
+
     std::vector<std::string> items;
     std::string temp = "";
     for (std::size_t i = 0; i != index; i++)
@@ -88,7 +91,7 @@ bool lazurite::http::parser::parser_first_line()
 
 bool lazurite::http::parser::parser_header()
 {
-    std::size_t index = _request.raw_request_msg.find("\r\n\r\n");
+    const std::size_t index = _request.raw_request_msg.find("\r\n\r\n");
     if (index == _request.raw_request_msg.npos || index - _request.first_line_end_index > 16 * 1024)
     {
         return false;
@@ -96,7 +99,6 @@ bool lazurite::http::parser::parser_header()
 
     std::size_t last_line_break_index = 0;
     std::size_t line_break_index = 0;
-    std::size_t erase_space_index;
     std::string line;
     std::string key;
     std::string value;
@@ -122,15 +124,15 @@ bool lazurite::http::parser::parser_header()
 
         key = line.substr(0, colon_index);
         value = line.substr(colon_index + 1, line.length() - 1);
-        erase_space_index = 0;
-        for (; erase_space_index != value.length(); erase_space_index++)
+        for (std::size_t erase_space_index = 0; erase_space_index != value.length(); erase_space_index++)
         {
             if (value.at(erase_space_index) != ' ')
             {
+                value.erase(0, erase_space_index);
                 break;
             }
         }
-        value.erase(0, erase_space_index);
+
         auto it = _request.params.find(key);
         if (it != _request.params.end())
         {
@@ -138,6 +140,7 @@ bool lazurite::http::parser::parser_header()
         }
         _request.params.insert(std::pair<std::string, std::string>(key,value));
     }
+    _request.header_end_index = index + 4;
 
     return true;
 }
