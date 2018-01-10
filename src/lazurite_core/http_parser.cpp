@@ -92,9 +92,16 @@ bool lazurite::http::parser::parser_first_line()
 bool lazurite::http::parser::parser_header()
 {
     const std::size_t index = _request.raw_request_msg.find("\r\n\r\n");
-    if (index == _request.raw_request_msg.npos || index - _request.first_line_end_index > 16 * 1024)
+    if (index == _request.raw_request_msg.npos)
     {
-        return false;
+        if (_request.raw_request_msg.length() - _request.first_line_end_index > 16 * 1024)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     std::size_t last_line_break_index = 0;
