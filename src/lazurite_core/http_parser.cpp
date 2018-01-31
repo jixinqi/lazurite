@@ -58,7 +58,7 @@ bool lazurite::http::parser::parser_first_line()
         return false;
     }
 
-    _request.raw_request_first_line = _request.raw_request_msg.substr(0, index + 2);
+    std::string raw_request_first_line = _request.raw_request_msg.substr(0, index + 2);
 
     std::vector<std::string> items;
     std::string temp = "";
@@ -110,17 +110,17 @@ bool lazurite::http::parser::parser_header()
     std::string key;
     std::string value;
 
-    _request.raw_request_header = _request.raw_request_msg.substr
+    std::string raw_request_header = _request.raw_request_msg.substr
     (
         _request.first_line_end_index,
         index - _request.first_line_end_index + 2
     );
 
-    while (line_break_index != _request.raw_request_header.npos && line_break_index < _request.raw_request_header.length())
+    while (line_break_index != raw_request_header.npos && line_break_index < raw_request_header.length())
     {
         last_line_break_index = line_break_index;
-        line_break_index = _request.raw_request_header.find("\r\n", line_break_index);
-        line = _request.raw_request_header.substr(last_line_break_index, line_break_index - last_line_break_index);
+        line_break_index = raw_request_header.find("\r\n", line_break_index);
+        line = raw_request_header.substr(last_line_break_index, line_break_index - last_line_break_index);
         line_break_index += 2;
 
         std::size_t colon_index = line.find(":");
@@ -140,12 +140,12 @@ bool lazurite::http::parser::parser_header()
             }
         }
 
-        auto it = _request.params.find(key);
-        if (it != _request.params.end())
+        auto it = _request.header.find(key);
+        if (it != _request.header.end())
         {
             return false;
         }
-        _request.params.insert(std::pair<std::string, std::string>(key,value));
+        _request.header.insert(std::pair<std::string, std::string>(key, value));
     }
     _request.header_end_index = index + 4;
 

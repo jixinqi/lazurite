@@ -13,10 +13,6 @@ namespace lazurite
 
             std::string raw_request_msg;
 
-            std::string raw_request_first_line;
-            std::string raw_request_header;
-            std::string raw_request_body;
-
             std::string request_method;
             std::string request_uri;
             std::string request_version;
@@ -38,6 +34,7 @@ namespace lazurite
         private:
             request       _request;
             bool          parser_first_line();
+            bool          parser_uri();
             bool          parser_header();
             bool          parser_body();
         };
