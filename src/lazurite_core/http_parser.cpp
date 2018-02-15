@@ -55,10 +55,12 @@ bool lazurite::http::parser::parser_first_line()
     const std::size_t index = _request.raw_request_msg.find("\r\n");
     if (index == _request.raw_request_msg.npos)
     {
+        return (_request.raw_request_msg.length() + 2 <= http_msg_first_line_max_length);
+    }
+    else if(index + 2 > http_msg_first_line_max_length)
+    {
         return false;
     }
-
-    std::string raw_request_first_line = _request.raw_request_msg.substr(0, index + 2);
 
     std::vector<std::string> items;
     std::string temp = "";
@@ -94,14 +96,11 @@ bool lazurite::http::parser::parser_header()
     const std::size_t index = _request.raw_request_msg.find("\r\n\r\n");
     if (index == _request.raw_request_msg.npos)
     {
-        if (_request.raw_request_msg.length() - _request.first_line_end_index > 16 * 1024)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return (_request.raw_request_msg.length() + 4 - _request.first_line_end_index <= http_msg_header_max_length);
+    }
+    else if (index + 4 - _request.first_line_end_index > http_msg_header_max_length)
+    {
+        return false;
     }
 
     std::size_t last_line_break_index = 0;

@@ -12,6 +12,7 @@
 
 #include <boost/asio.hpp>
 
+/*
 namespace lazurite
 {
     namespace http
@@ -19,7 +20,9 @@ namespace lazurite
         typedef std::array<unsigned char, 4 * 1024> http_msg_buffer;
     }
 }
+*/
 
+#include "lazurite_config.h"
 #include "http_parser.h"
 #include "http_listen.h"
 #include "http_server.h"
