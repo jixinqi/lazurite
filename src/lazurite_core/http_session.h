@@ -15,10 +15,12 @@ namespace lazurite
             void start();
             void do_read();
             void do_write();
+            void do_write_400();
         private:
             std::shared_ptr<boost::asio::io_service> io_service_ptr;
             boost::asio::ip::tcp::socket             socket;
             http_msg_buffer                          buffer;
+            std::string                              response_msg;
             parser                                   _parser;
         };
     }

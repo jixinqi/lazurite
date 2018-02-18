@@ -4,6 +4,11 @@ lazurite::http::parser::parser()
 {
 }
 
+std::string lazurite::http::parser::get_raw_msg()
+{
+    return _request.raw_request_msg;
+}
+
 std::size_t lazurite::http::parser::raw_msg_length()
 {
     return _request.raw_request_msg.size();
@@ -35,12 +40,10 @@ bool lazurite::http::parser::do_parse()
     }
     if (_request.header_end_index != 0 && _request.body_end_index == 0)
     {
-        /*
         if (!parser_body())
         {
             return false;
         }
-        */
     }
     return true;
 }
@@ -149,4 +152,17 @@ bool lazurite::http::parser::parser_header()
     _request.header_end_index = index + 4;
 
     return true;
+}
+
+bool lazurite::http::parser::parser_body()
+{
+    if (_request.request_method == "GET")
+    {
+        _request.body_end_index = _request.raw_request_msg.length();
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }

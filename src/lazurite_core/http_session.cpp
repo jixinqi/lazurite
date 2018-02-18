@@ -35,7 +35,7 @@ void lazurite::http::session::do_read()
 
             if (!_parser.do_parse())
             {
-                return;
+                do_write_400();
             }
 
             if (!_parser.msg_end())
@@ -52,5 +52,31 @@ void lazurite::http::session::do_read()
 
 void lazurite::http::session::do_write()
 {
+    auto self(shared_from_this());
+    
+    response_msg.append("HTTP/1.1 200 OK\r\n");
+    response_msg.append("Connection: close\r\n");
+    response_msg.append("Server: lazurite/0.1\r\n");
+    response_msg.append("Content-Type: text/plain\r\n");
+    response_msg.append("Content-Length: ").append(std::to_string(_parser.raw_msg_length())).append("\r\n");
+    response_msg.append("\r\n");
+    response_msg.append(_parser.get_raw_msg());
 
+    boost::asio::async_write(
+        socket,
+        boost::asio::buffer(response_msg, response_msg.length()),
+        [this, self](boost::system::error_code ec, std::size_t /*length*/)
+        {
+            if (ec)
+            {
+                return;
+            }
+        }
+    );
+}
+
+void lazurite::http::session::do_write_400()
+{
+    auto self(shared_from_this());
+    //dev
 }

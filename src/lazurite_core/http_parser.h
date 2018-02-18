@@ -25,6 +25,7 @@ namespace lazurite
         {
         public:
             parser();
+            std::string   get_raw_msg();
             std::size_t   raw_msg_length();
             void          append_msg(const http_msg_buffer &_http_msg_buffer, const std::size_t &_length);
 
