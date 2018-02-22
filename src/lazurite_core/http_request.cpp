@@ -1,20 +1,16 @@
 #include "lazurite_header.h"
 
-lazurite::http::parser::parser()
-{
-}
-
-std::string lazurite::http::parser::get_raw_msg()
+std::string lazurite::http::request_parser::get_raw_msg()
 {
     return _request.raw_request_msg;
 }
 
-std::size_t lazurite::http::parser::raw_msg_length()
+std::size_t lazurite::http::request_parser::raw_msg_length()
 {
     return _request.raw_request_msg.size();
 }
 
-void lazurite::http::parser::append_msg(const http_msg_buffer &_http_msg_buffer, const std::size_t &_length)
+void lazurite::http::request_parser::append_msg(const http_msg_buffer &_http_msg_buffer, const std::size_t &_length)
 {
     for (std::size_t i = 0; i != _length; i++)
     {
@@ -22,7 +18,7 @@ void lazurite::http::parser::append_msg(const http_msg_buffer &_http_msg_buffer,
     }
 }
 
-bool lazurite::http::parser::do_parse()
+bool lazurite::http::request_parser::do_parse()
 {
     if (_request.first_line_end_index == 0)
     {
@@ -48,12 +44,12 @@ bool lazurite::http::parser::do_parse()
     return true;
 }
 
-bool lazurite::http::parser::msg_end()
+bool lazurite::http::request_parser::msg_end()
 {
     return _request.body_end_index != 0;
 }
 
-bool lazurite::http::parser::parser_first_line()
+bool lazurite::http::request_parser::parser_first_line()
 {
     const std::size_t index = _request.raw_request_msg.find("\r\n");
     if (index == _request.raw_request_msg.npos)
@@ -94,7 +90,7 @@ bool lazurite::http::parser::parser_first_line()
     return true;
 }
 
-bool lazurite::http::parser::parser_header()
+bool lazurite::http::request_parser::parser_header()
 {
     const std::size_t index = _request.raw_request_msg.find("\r\n\r\n");
     if (index == _request.raw_request_msg.npos)
@@ -154,7 +150,7 @@ bool lazurite::http::parser::parser_header()
     return true;
 }
 
-bool lazurite::http::parser::parser_body()
+bool lazurite::http::request_parser::parser_body()
 {
     if (_request.request_method == "GET")
     {

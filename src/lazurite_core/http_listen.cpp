@@ -2,10 +2,12 @@
 
 lazurite::http::listen::listen(
     std::shared_ptr<boost::asio::io_service> io_service_ptr,
+    std::shared_ptr<route>                   route_ptr,
     std::string                              ip,
     std::uint32_t                            port
 )
 :io_service_ptr(io_service_ptr)
+,route_ptr(route_ptr)
 ,acceptor(*io_service_ptr, boost::asio::ip::tcp::endpoint(boost::asio::ip::address::from_string(ip), port))
 ,socket(*io_service_ptr)
 {
@@ -20,7 +22,7 @@ void lazurite::http::listen::do_accept()
         {
             if (!ec)
             {
-                std::make_shared<session>(io_service_ptr,std::move(socket))->start();
+                std::make_shared<session>(io_service_ptr, route_ptr,std::move(socket))->start();
             }
             do_accept();
         }

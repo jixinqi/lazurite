@@ -9,10 +9,14 @@ namespace lazurite
         {
         public:
             server();
-            server& operator=(const server &) = delete;
-            void add_route();
+            server& operator=(const server&) = delete;
+            void add_route(
+                std::string path,
+                std::function<std::string(request&, response&)> handle
+            );
             void run();
         private:
+            std::shared_ptr<route> route_ptr = std::make_shared<route>();
         };
     }
 }

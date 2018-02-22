@@ -10,12 +10,14 @@ namespace lazurite
         public:
             listen(
                 std::shared_ptr<boost::asio::io_service> io_service_ptr,
+                std::shared_ptr<route>                   route_ptr,
                 std::string                              ip,
                 std::uint32_t                            port
             );
             void do_accept();
         private:
             std::shared_ptr<boost::asio::io_service> io_service_ptr;
+            std::shared_ptr<route>                   route_ptr;
             boost::asio::ip::tcp::acceptor           acceptor;
             boost::asio::ip::tcp::socket             socket;
 

@@ -21,10 +21,10 @@ namespace lazurite
             std::map<std::string, std::string> data;
         };
 
-        class parser
+        class request_parser
         {
         public:
-            parser();
+            request_parser() = default;
             std::string   get_raw_msg();
             std::size_t   raw_msg_length();
             void          append_msg(const http_msg_buffer &_http_msg_buffer, const std::size_t &_length);
@@ -32,8 +32,9 @@ namespace lazurite
             bool          do_parse();
             bool          msg_end();
 
-        private:
             request       _request;
+
+        private:
             bool          parser_first_line();
             bool          parser_uri();
             bool          parser_header();
