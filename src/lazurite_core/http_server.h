@@ -12,7 +12,7 @@ namespace lazurite
             server& operator=(const server&) = delete;
             void add_route(
                 std::string path,
-                std::function<std::string(request_parser&, response_build&)> handle
+                std::function<std::string(request&, response&)> handle
             );
             void run();
         private:

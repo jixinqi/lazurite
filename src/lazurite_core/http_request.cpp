@@ -1,65 +1,122 @@
 #include "lazurite_header.h"
 
-std::string lazurite::http::request_parser::raw_msg()
+void lazurite::http::request::append_raw_msg(std::string &msg)
 {
-    return _request.raw_request_msg;
+    _raw_msg.append(msg);
 }
 
-std::string lazurite::http::request_parser::request_method()
+void lazurite::http::request::add_params(std::string &key, std::string &value)
 {
-    return _request.request_method;
+    _params.insert({ key,value });
 }
 
-std::string lazurite::http::request_parser::request_uri()
+void lazurite::http::request::add_header(std::string &key, std::string &value)
 {
-    return _request.request_uri;
+    _header.insert({ key,value });
 }
 
-std::string lazurite::http::request_parser::request_version()
+void lazurite::http::request::request_method(std::string &method)
 {
-    return _request.request_version;
+    _request_method = method;
 }
 
-std::map<std::string, std::string> lazurite::http::request_parser::params()
+void lazurite::http::request::request_uri(std::string &uri)
 {
-    return _request.params;
+    _request_uri = uri;
 }
 
-std::map<std::string, std::string> lazurite::http::request_parser::header()
+void lazurite::http::request::request_version(std::string &version)
 {
-    return _request.header;
+    _request_version = version;
 }
 
-std::map<std::string, std::string> lazurite::http::request_parser::data()
+std::string lazurite::http::request::raw_msg()
 {
-    return _request.data;
+    return _raw_msg;
+}
+
+std::string lazurite::http::request::request_method()
+{
+    return _request_method;
+}
+
+std::string lazurite::http::request::request_uri()
+{
+    return _request_uri;
+}
+
+std::string lazurite::http::request::request_version()
+{
+    return _request_version;
+}
+
+std::map<std::string, std::string> lazurite::http::request::params()
+{
+    return _params;
+}
+
+std::map<std::string, std::string> lazurite::http::request::header()
+{
+    return _header;
+}
+
+void lazurite::http::request::first_line_end_index(std::size_t index)
+{
+    _first_line_end_index = index;
+}
+
+void lazurite::http::request::header_end_index(std::size_t index)
+{
+    _header_end_index = index;
+}
+
+void lazurite::http::request::body_end_index(std::size_t index)
+{
+    _body_end_index = index;
+}
+
+std::size_t lazurite::http::request::first_line_end_index()
+{
+    return _first_line_end_index;
+}
+
+std::size_t lazurite::http::request::header_end_index()
+{
+    return _header_end_index;
+}
+
+std::size_t lazurite::http::request::body_end_index()
+{
+    return _body_end_index;
 }
 
 void lazurite::http::request_parser::append_msg(const http_msg_buffer &_http_msg_buffer, const std::size_t &_length)
 {
+    std::string msg;
     for (std::size_t i = 0; i != _length; i++)
     {
-        _request.raw_request_msg.push_back(_http_msg_buffer.at(i));
+        msg.push_back(_http_msg_buffer.at(i));
     }
+    _request.append_raw_msg(msg);
 }
 
 bool lazurite::http::request_parser::do_parse()
 {
-    if (_request.first_line_end_index == 0)
+    if (_request.first_line_end_index() == 0)
     {
         if (!parser_first_line())
         {
             return false;
         }
     }
-    if (_request.first_line_end_index != 0 && _request.header_end_index == 0)
+    if (_request.first_line_end_index() != 0 && _request.header_end_index() == 0)
     {
         if (!parser_header())
         {
             return false;
         }
     }
-    if (_request.header_end_index != 0 && _request.body_end_index == 0)
+    if (_request.header_end_index() != 0 && _request.body_end_index() == 0)
     {
         if (!parser_body())
         {
@@ -71,15 +128,20 @@ bool lazurite::http::request_parser::do_parse()
 
 bool lazurite::http::request_parser::msg_end()
 {
-    return _request.body_end_index != 0;
+    return _request.body_end_index() != 0;
+}
+
+lazurite::http::request& lazurite::http::request_parser::get_request()
+{
+    return _request;
 }
 
 bool lazurite::http::request_parser::parser_first_line()
 {
-    const std::size_t index = _request.raw_request_msg.find("\r\n");
-    if (index == _request.raw_request_msg.npos)
+    const std::size_t index = _request.raw_msg().find("\r\n");
+    if (index == _request.raw_msg().npos)
     {
-        return (_request.raw_request_msg.length() + 2 <= http_msg_first_line_max_length);
+        return (_request.raw_msg().length() + 2 <= http_msg_first_line_max_length);
     }
     else if(index + 2 > http_msg_first_line_max_length)
     {
@@ -90,9 +152,9 @@ bool lazurite::http::request_parser::parser_first_line()
     std::string temp = "";
     for (std::size_t i = 0; i != index; i++)
     {
-        if (_request.raw_request_msg.at(i) != ' ')
+        if (_request.raw_msg().at(i) != ' ')
         {
-            temp.push_back(_request.raw_request_msg.at(i));
+            temp.push_back(_request.raw_msg().at(i));
         }
         else
         {
@@ -107,22 +169,22 @@ bool lazurite::http::request_parser::parser_first_line()
         return false;
     }
 
-    _request.request_method       = items.at(0);
-    _request.request_uri          = items.at(1);
-    _request.request_version      = items.at(2);
-    _request.first_line_end_index = index + 2;
+    _request.request_method(items.at(0));
+    _request.request_uri(items.at(1));
+    _request.request_version(items.at(2));
+    _request.first_line_end_index(index + 2);
 
     return true;
 }
 
 bool lazurite::http::request_parser::parser_header()
 {
-    const std::size_t index = _request.raw_request_msg.find("\r\n\r\n");
-    if (index == _request.raw_request_msg.npos)
+    const std::size_t index = _request.raw_msg().find("\r\n\r\n");
+    if (index == _request.raw_msg().npos)
     {
-        return (_request.raw_request_msg.length() + 4 - _request.first_line_end_index <= http_msg_header_max_length);
+        return (_request.raw_msg().length() + 4 - _request.first_line_end_index() <= http_msg_header_max_length);
     }
-    else if (index + 4 - _request.first_line_end_index > http_msg_header_max_length)
+    else if (index + 4 - _request.first_line_end_index() > http_msg_header_max_length)
     {
         return false;
     }
@@ -133,10 +195,10 @@ bool lazurite::http::request_parser::parser_header()
     std::string key;
     std::string value;
 
-    std::string raw_request_header = _request.raw_request_msg.substr
+    std::string raw_request_header = _request.raw_msg().substr
     (
-        _request.first_line_end_index,
-        index - _request.first_line_end_index + 2
+        _request.first_line_end_index(),
+        index - _request.first_line_end_index() + 2
     );
 
     while (line_break_index != raw_request_header.npos && line_break_index < raw_request_header.length())
@@ -163,23 +225,18 @@ bool lazurite::http::request_parser::parser_header()
             }
         }
 
-        auto it = _request.header.find(key);
-        if (it != _request.header.end())
-        {
-            return false;
-        }
-        _request.header.insert(std::pair<std::string, std::string>(key, value));
+        _request.add_header(key, value);
     }
-    _request.header_end_index = index + 4;
+    _request.header_end_index(index + 4);
 
     return true;
 }
 
 bool lazurite::http::request_parser::parser_body()
 {
-    if (_request.request_method == "GET")
+    if (_request.request_method() == "GET")
     {
-        _request.body_end_index = _request.raw_request_msg.length();
+        _request.body_end_index(_request.raw_msg().length());
         return true;
     }
     else

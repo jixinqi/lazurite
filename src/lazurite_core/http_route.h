@@ -21,12 +21,11 @@ namespace lazurite
             void add
             (
                 std::string path,
-                std::function<std::string(request_parser&, response_build&)> handle
+                std::function<std::string(request&, response&)> handle
             );
-            void build_error_response_msg_body(response &_response);
-            void run_route_handle(request_parser &_request_parser, response_build &_response_build);
+            void run_handle(request &_request, response &_response);
         private:
-            std::map<std::string,std::function<std::string(request_parser&, response_build&)>> route_table;
+            std::map<std::string,std::function<std::string(request&, response&)>> route_table;
         };
     }
 }

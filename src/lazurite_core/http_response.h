@@ -5,33 +5,33 @@ namespace lazurite
 {
     namespace http
     {
-        struct response
+        class response
         {
-            std::uint16_t status_code = 0;
-            std::string   phrase;
-            std::string   msg_body;
+        public:
+            void          status_code(std::uint16_t code);
+            void          phrase(std::string _phrase);
+            void          msg_body(std::string _msg_body);
+
+            std::uint16_t status_code();
+            std::string   phrase();
+            std::string   msg_body();
+
+            void          error_msg_body();
+        private:
+            std::uint16_t _status_code = 0;
+            std::string   _phrase;
+            std::string   _msg_body;
         };
 
         class response_build
         {
         public:
             response_build() = default;
-
-            void status_code(std::uint16_t code);
-            void phrase(std::string _phrase);
-            void msg_body(std::string _msg_body);
-            void error_msg_body();
-
-            std::uint16_t status_code();
-            std::string   phrase();
-            std::string   msg_body();
-
-            std::string   build_response_msg();
-
+            std::string complete_msg();
+            response&   get_response();
         private:
-            response                 _response;
-            
-            std::shared_ptr<request> request_ptr;
+            response                   _response;
+            //std::shared_ptr<request> request_ptr;
         };
     }
 }
