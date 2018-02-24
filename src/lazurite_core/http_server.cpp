@@ -6,10 +6,10 @@ lazurite::http::server::server()
 
 void lazurite::http::server::add_route(
     std::string path,
-    std::function<std::string(request&, response&)> handle
+    std::function<std::string(request_parser&, response_build&)> handle
 )
 {
-    route_ptr->add_route(path,handle);
+    route_ptr->add(path, handle);
 }
 
 void lazurite::http::server::run()

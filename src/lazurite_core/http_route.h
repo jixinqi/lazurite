@@ -18,15 +18,15 @@ namespace lazurite
         class route
         {
         public:
-            void add_route
+            void add
             (
-                std::string &path,
-                std::function<std::string(request&,response&)> handle
+                std::string path,
+                std::function<std::string(request_parser&, response_build&)> handle
             );
             void build_error_response_msg_body(response &_response);
-            void run_route_handle(request &_request, response &_response);
+            void run_route_handle(request_parser &_request_parser, response_build &_response_build);
         private:
-            std::map<std::string,std::function<std::string(request&, response&)>> route_table;
+            std::map<std::string,std::function<std::string(request_parser&, response_build&)>> route_table;
         };
     }
 }

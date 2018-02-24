@@ -1,13 +1,38 @@
 #include "lazurite_header.h"
 
-std::string lazurite::http::request_parser::get_raw_msg()
+std::string lazurite::http::request_parser::raw_msg()
 {
     return _request.raw_request_msg;
 }
 
-std::size_t lazurite::http::request_parser::raw_msg_length()
+std::string lazurite::http::request_parser::request_method()
 {
-    return _request.raw_request_msg.size();
+    return _request.request_method;
+}
+
+std::string lazurite::http::request_parser::request_uri()
+{
+    return _request.request_uri;
+}
+
+std::string lazurite::http::request_parser::request_version()
+{
+    return _request.request_version;
+}
+
+std::map<std::string, std::string> lazurite::http::request_parser::params()
+{
+    return _request.params;
+}
+
+std::map<std::string, std::string> lazurite::http::request_parser::header()
+{
+    return _request.header;
+}
+
+std::map<std::string, std::string> lazurite::http::request_parser::data()
+{
+    return _request.data;
 }
 
 void lazurite::http::request_parser::append_msg(const http_msg_buffer &_http_msg_buffer, const std::size_t &_length)

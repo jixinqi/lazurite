@@ -1,22 +1,44 @@
 #include "lazurite_header.h"
 
-/*
-void lazurite::http::response_build::set_status(std::uint16_t status_code, std::string response_phrase)
+void lazurite::http::response_build::status_code(std::uint16_t _status_code)
 {
-    _response.status_code = status_code;
-    _response.phrase      = response_phrase;
+    _response.status_code = _status_code;
 }
 
-void lazurite::http::response_build::response_msg_body()
+void lazurite::http::response_build::phrase(std::string _phrase)
 {
-    if (_response.status_code != 0)
-    {
-        _response.msg_body.append(std::to_string(_response.status_code))
-                          .append(" ")
-                          .append(_response.phrase);
-    }
+    _response.phrase = _phrase;
 }
-*/
+
+void lazurite::http::response_build::msg_body(std::string _msg_body)
+{
+    _response.msg_body = _msg_body;
+}
+
+
+void lazurite::http::response_build::error_msg_body()
+{
+    _response.msg_body.clear();
+    _response.msg_body.append(std::to_string(_response.status_code))
+                      .append(" ")
+                      .append(_response.phrase);
+}
+
+
+std::uint16_t lazurite::http::response_build::status_code()
+{
+    return _response.status_code;
+}
+
+std::string lazurite::http::response_build::phrase()
+{
+    return _response.phrase;
+}
+
+std::string lazurite::http::response_build::msg_body()
+{
+    return _response.msg_body;
+}
 
 std::string lazurite::http::response_build::build_response_msg()
 {

@@ -41,7 +41,6 @@ void lazurite::http::session::do_read()
             }
             else
             {
-                //response_msg_body();
                 do_write();
             }
         }
@@ -51,8 +50,7 @@ void lazurite::http::session::do_read()
 void lazurite::http::session::do_write()
 {
     auto self(shared_from_this());
-    //http_response_msg = _response_build.build_response_msg();
-    route_ptr->run_route_handle(_request_parser._request,_response_build._response);
+    route_ptr->run_route_handle(_request_parser,_response_build);
     http_response_msg = _response_build.build_response_msg();
     boost::asio::async_write(
         socket,

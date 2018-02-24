@@ -1,14 +1,11 @@
-#include <iostream>
-#include <string>
-
 #include "lazurite_core.h"
 
-std::string hello(lazurite::http::request &_request,lazurite::http::response &_response)
+std::string index_page(lazurite::http::request_parser &_request_parser, lazurite::http::response_build &_response_build)
 {
-    return "hello, world!";
+    return "index page";
 }
 
-std::string about(lazurite::http::request &_request, lazurite::http::response &_response)
+std::string about_page(lazurite::http::request_parser &_request_parser, lazurite::http::response_build &_response_build)
 {
     return "about page";
 }
@@ -16,7 +13,7 @@ std::string about(lazurite::http::request &_request, lazurite::http::response &_
 int main()
 {
     lazurite::http::server http_server;
-    http_server.add_route("/hello",hello);
-    http_server.add_route("/about", about);
+    http_server.add_route("/", index_page);
+    http_server.add_route("/about", about_page);
     http_server.run();
 }
