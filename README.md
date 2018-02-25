@@ -17,14 +17,14 @@ Lazurite 包含了 Socket I/O 模块，HTTP 数据包 Parser 模块，以及 HTT
 
 std::string hello_page(lazurite::http::request &_request, lazurite::http::response &_response)
 {
-	    return "hello_world\n";
+    return "hello_world\n";
 }
 
 int main()
 {
-	    lazurite::http::server http_server;
-		    http_server.add_route("/",hello_page);
-			    http_server.run();
+    lazurite::http::server http_server;
+    http_server.add_route("/",hello_page);
+    http_server.run();
 }
 ````
 
@@ -40,7 +40,7 @@ hello_world
 ````
 std::string raw_msg(lazurite::http::request &_request, lazurite::http::response &_response)
 {
-	    return _request.raw_msg();
+    return _request.raw_msg();
 }
 
 http_server.add_route("/raw_msg",raw_msg);
