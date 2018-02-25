@@ -3,7 +3,7 @@
 void lazurite::http::route::add
 (
     std::string path,
-    std::function<std::string(request&, response&)> handle
+    std::function<void(request&, response&)> handle
 )
 {
     route_table.insert({ path,handle });
@@ -21,6 +21,6 @@ void lazurite::http::route::run_handle(request &_request, response &_response)
     }
     else
     {
-        _response.msg_body(route_table[path](_request, _response));
+        route_table[path](_request, _response);
     }
 }
